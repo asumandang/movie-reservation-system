@@ -1,0 +1,129 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Scanner;
+
+public class Helper {
+	static Scanner sc = new Scanner(System.in);
+	/**
+	 * Obtains user's integer input.
+	 * @return user input if valid; -1 if not
+	 * 
+	 * @author ajruth.sumandang
+	 */
+	public static int getIntInput(){
+		sc = new Scanner(System.in);
+		String input = sc.nextLine();
+		if (input.matches("-?\\d+")) {
+			int value = Integer.parseInt(input);
+			return value;
+		} else {
+			return -1;
+		}
+	}
+	
+	/**
+	 * Obtains user's integer input within the specified range.
+	 * @param min - the minimum value allowed for the user input
+	 * @param max - the maximum value allowed
+	 * @return user input if valid; -1 if not
+	 * 
+	 * @author ajruth.sumandang
+	 */
+	public static int getIntInput(int min, int max){
+		int input = getIntInput();
+		if(input < min || input > max){
+			input = -1;
+		}
+		return input;
+	}
+	
+	/**
+	 * Obtains user's float input.
+	 * @return user input if valid; -1 if not
+	 * 
+	 * @author ajruth.sumandang
+	 */
+	public static float getFloatInput(){
+		sc = new Scanner(System.in);
+		String input = sc.nextLine();
+		if (input.matches("[+-]?([0-9]*[.])?[0-9]*")) {
+			float value = Float.parseFloat(input);
+			return value;
+		} else {
+			return -1;
+		}
+	}
+	
+	/**
+	 * Obtains the user's string input.
+	 * @return valid string input
+	 * 
+	 * @author ajruth.sumandang
+	 */
+	public static String getStringInput(){
+		String b = sc.nextLine();
+		return b;
+	}
+	
+	/**
+	 * Obtains the user's date string input.
+	 * @return user input date if valid; null if invalid
+	 * 
+	 * @author ajruth.sumandang
+	 */
+	public static Date getDateInput(){
+		Date date = null;
+		int choice = 1;
+		do{
+			String strDate = sc.next();
+			SimpleDateFormat sdfrmt = new SimpleDateFormat("MM/dd/yyyy");
+		    sdfrmt.setLenient(false);
+		    try{
+		        date = sdfrmt.parse(strDate); 
+		    }catch(ParseException e){
+		        date = null;
+		    }
+		    
+		    if(date == null){
+				System.out.print("Invalid input! Press 1 to input again. ");
+				choice = Helper.getIntInput();
+				if(choice == 1){
+					System.out.print("Input: ");
+				}
+			} else {
+				choice = 0;
+			}
+		}while(choice == 1);
+		
+	    return date;
+	}
+	
+	/**
+	 * Obtains the user's date input.
+	 * AHJ: dummy function until zen finishes the input tester.
+	 * @return valid date input
+	 */
+	public static Date getDate(){
+		int i = (int) (Math.random() * 100)  % 29 + 1;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, 2020);
+		cal.set(Calendar.MONTH, Calendar.DECEMBER);
+		cal.set(Calendar.DAY_OF_MONTH, i);
+		return cal.getTime();
+	}
+	
+	/**
+	 * Formats the date into a string of format 'MM/DD/YYYY'
+	 * @param date the date to be formatted
+	 * @return string format of the received date
+	 * @author ajruth.sumandang 
+	 */
+	public static String dateFormatter(Date date){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		return "" + (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.YEAR);
+	}
+}
