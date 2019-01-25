@@ -319,19 +319,19 @@ public class Helper {
 	 * 
 	 * @author mark.torres 
 	 */
-	public static int getLatestId() {
+	public static int getLatestId(String filename) {
         String id;
         int ID;
         BufferedReader br;
         try {
-            br = new BufferedReader(new FileReader(MovieSchedule.SCHEDMETA));
+            br = new BufferedReader(new FileReader(filename));
             id = br.readLine();
             ID = Integer.parseInt(id);
             return ID;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(MovieScheduleTest.class.getName()).log(Level.SEVERE, null, ex);
+           
         } catch (IOException ex) {
-            Logger.getLogger(MovieScheduleTest.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
 
         return 0;
