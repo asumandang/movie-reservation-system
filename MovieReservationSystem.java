@@ -6,7 +6,7 @@ import java.util.Date;
 
 /**
  * This class calls all the function necessary for 
- * adding movies, & creating and cancelling reservations. 
+ * adding movies, & creating and canceling reservations. 
  * @author ajruth.sumandang
  * @author Rod Yap
  */
@@ -47,8 +47,9 @@ public class MovieReservationSystem {
 		System.out.println("What do you wish to do?");
 		System.out.println("[1] Display Movie");
 		System.out.println("[2] Add Movie");
-		System.out.println("[3] Reserve Seat(s)");
-		System.out.println("[4] Cancel Reservation");
+		System.out.println("[3] Cancel Movie Schedule");
+		System.out.println("[4] Reserve Seat(s)");
+		System.out.println("[5] Cancel Reservation");
 		System.out.println("[0] Exit Program");
 		System.out.print("Choice: ");
 	}
@@ -70,9 +71,12 @@ public class MovieReservationSystem {
 					System.out.println(e);
 				}
 				break;
-			case 3: // reserve seat
+			case 3: // cancel movie schedule
+				cancelMovieSchedule();
 				break;
-			case 4: // cancel reservation
+			case 4: // reserve seat
+				break;
+			case 5: // cancel reservation
 				break;
 			case 0: // exit program
 				System.out.println("Thank you for using this program.");
@@ -93,11 +97,12 @@ public class MovieReservationSystem {
 			return;
 		}
 		System.out.println("____________________________________________________________________");
-		System.out.println("Cinema	Start Date	End Date	Time	Reg Price	Movie Title");
+		System.out.println("    Cinema	Start Date	End Date	Time	Reg Price	Movie Title");
 		while(movieSchedules.size() > i){
+			System.out.print("[" + (i + 1) + "] ");
 			MovieSchedule m = movieSchedules.get(i);
 			
-			System.out.println(m.getCinema() + "	" 
+			System.out.println(m.getCinema() + "		" 
 			+ Helper.dateFormatter(m.getStartDate()) + "	" 
 			+ Helper.dateFormatter(m.getEndDate()) + "	"
 			+ Helper.timeFormatter(m.getTime()) + "	"
@@ -116,6 +121,21 @@ public class MovieReservationSystem {
 					return;
 				}
 			}
+		}
+	}
+	
+	private void cancelMovieSchedule(){
+		int choice;
+		displayMovies();
+		System.out.print("Choice: ");
+		try{
+			choice = Helper.getIntInput();
+			//TODO: Ahj - Mark: Uncomment if the function below is working
+			//movieSchedules.get(choice - 1).deactivate();
+			movieSchedules.remove(choice - 1);
+		}catch (InvalidInputException e) {
+			System.out.println(e);
+			System.out.println("Exiting to main menu...");
 		}
 	}
 	
@@ -166,8 +186,6 @@ public class MovieReservationSystem {
 					endDate = startDate;
 				}
 				
-//				System.out.print("Enter start time (HH:MM): ");
-//				time = Helper.getTimeInput();
 				showMovieScheduleSummary(new MovieSchedule(movie, cinema[i], startDate, endDate, time));
 				movieSchedules.add(new MovieSchedule(movie, cinema[i], startDate, endDate, time));
 				i++;
