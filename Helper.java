@@ -312,4 +312,28 @@ public class Helper {
 		SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
 	    return localDateFormat.format(time);
 	}
+	/**
+	 * Retrieves the latest ID of an object
+	 * @param filename filename of the Meta file
+	 * @return int latest id in the storage
+	 * 
+	 * @author mark.torres 
+	 */
+	public static int getLatestId() {
+        String id;
+        int ID;
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader(MovieSchedule.SCHEDMETA));
+            id = br.readLine();
+            ID = Integer.parseInt(id);
+            return ID;
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MovieScheduleTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MovieScheduleTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return 0;
+    }
 }
