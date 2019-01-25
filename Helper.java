@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Scanner;
 
+import exceptions.InvalidInputException;
+
 public class Helper {
 	static Scanner sc = new Scanner(System.in);
 	/**
@@ -312,28 +314,4 @@ public class Helper {
 		SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
 	    return localDateFormat.format(time);
 	}
-	/**
-	 * Retrieves the latest ID of an object
-	 * @param filename filename of the Meta file
-	 * @return int latest id in the storage
-	 * 
-	 * @author mark.torres 
-	 */
-	public static int getLatestId(String filename) {
-        String id;
-        int ID;
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(filename));
-            id = br.readLine();
-            ID = Integer.parseInt(id);
-            return ID;
-        } catch (FileNotFoundException ex) {
-           
-        } catch (IOException ex) {
-            
-        }
-
-        return 0;
-    }
 }

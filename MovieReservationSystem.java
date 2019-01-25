@@ -3,6 +3,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import models.MovieSchedule;
+import exceptions.InvalidInputException;
+import models.Movie;
+import models.Reservation;
 
 /**
  * This class calls all the function necessary for 
@@ -30,10 +35,10 @@ public class MovieReservationSystem {
 			displayMenu();
 			try {
 				choice = Helper.getIntInput(false);
+				process(choice);
 			} catch (InvalidInputException e) {
 				System.out.println(e);
 			}
-			process(choice);
 		}while(choice != 0);
 	}
 	
@@ -58,18 +63,15 @@ public class MovieReservationSystem {
 	 * Contains the processes the system will execute.
 	 * @param choice - the user's choice
 	 * @author ajruth.sumandang
+	 * @throws InvalidInputException 
 	 */
-	private void process(int choice){
+	private void process(int choice) throws InvalidInputException{
 		switch(choice){
 			case 1: // display movies
 				displayMovies();
 				break;
 			case 2: // add movie to cinema
-				try {
-					addMovieSchedule();
-				} catch (InvalidInputException e) {
-					System.out.println(e);
-				}
+				addMovieSchedule();
 				break;
 			case 3: // cancel movie schedule
 				cancelMovieSchedule();
@@ -77,6 +79,7 @@ public class MovieReservationSystem {
 			case 4: // reserve seat
 				break;
 			case 5: // cancel reservation
+				cancelReservation();
 				break;
 			case 0: // exit program
 				System.out.println("Thank you for using this program.");
@@ -97,17 +100,17 @@ public class MovieReservationSystem {
 			return;
 		}
 		System.out.println("____________________________________________________________________");
-		System.out.println("    Cinema	Start Date	End Date	Time	Reg Price	Movie Title");
+		System.out.println("    Cinema	Start Date	End Date	Reg Price	Movie Title");
 		while(movieSchedules.size() > i){
 			System.out.print("[" + (i + 1) + "] ");
 			MovieSchedule m = movieSchedules.get(i);
+			Movie mov = getMovie(m.getMovieId());
 			
-			System.out.println(m.getCinema() + "		" 
+			System.out.println(m.getCinemaId() + "		" 
 			+ Helper.dateFormatter(m.getStartDate()) + "	" 
 			+ Helper.dateFormatter(m.getEndDate()) + "	"
-			+ Helper.timeFormatter(m.getTime()) + "	"
-			+ m.getMovie().getRegularPrice() + "		"
-			+ m.getMovie().getMovieTitle());
+			+ mov.getRegularPrice() + "		"
+			+ mov.getMovieTitle());
 
 			i++;
 			if(i != 0 && i % 10 == 0){
@@ -121,6 +124,25 @@ public class MovieReservationSystem {
 					return;
 				}
 			}
+		}
+	}
+	
+	private void cancelReservation() throws InvalidInputException{
+		int customerId;
+		Reservation[] reservations;
+		System.out.print("Enter customer ID: ");
+		customerId = Helper.getIntInput();
+		
+		//TODO: Ahj - Zen: retrieves the reservation list based on the customer id
+		reservations = getReservationList(customerId);
+		displayReservationList(reservations);
+	}
+	
+	private void displayReservationList(Reservation[] reservations){
+		System.out.println("___________________________________");
+		for(int i = 0; i < reservations.length; i++){
+//			MovieSchedule movieSched = movieSchedules.
+			System.out.println("");
 		}
 	}
 	
@@ -186,8 +208,10 @@ public class MovieReservationSystem {
 					endDate = startDate;
 				}
 				
-				showMovieScheduleSummary(new MovieSchedule(movie, cinema[i], startDate, endDate, time));
-				movieSchedules.add(new MovieSchedule(movie, cinema[i], startDate, endDate, time));
+				
+				//TODO: Ahj - Zen: Get latest schedule id and update the dummy '1' value below
+				showMovieScheduleSummary(new MovieSchedule(1, movie.getMovieId(), cinema[i], startDate, endDate, true));
+				movieSchedules.add(new MovieSchedule(1, movie.getMovieId(), cinema[i], startDate, endDate, true));
 				i++;
 			}
 			
@@ -288,7 +312,7 @@ public class MovieReservationSystem {
 	 * @author ajruth.sumandang
 	 */
 	private void showMovieScheduleSummary(MovieSchedule movieSched){
-		System.out.println("[Movie Schedule Summary for Cinema " + movieSched.getCinema() +  "]");
+		System.out.println("[Movie Schedule Summary for Cinema " + movieSched.getCinemaId() +  "]");
 		System.out.println("[1] Start date: " + Helper.dateFormatter(movieSched.getStartDate()));
 		System.out.println("[2] End date: " + Helper.dateFormatter(movieSched.getEndDate()));
 		System.out.println("_______________________________");
@@ -300,5 +324,22 @@ public class MovieReservationSystem {
 	 * @author ajruth.sumandang
 	 */
 	private void setSystem(){
+		//TODO: Ahj - Zen = set up the movieschedule here
+	}
+	
+	private Reservation[] getReservationList(int customerId){
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+		
+		reservations.add(new Reservation());
+		reservations.add(new Reservation());
+		reservations.add(new Reservation());
+		
+		return (Reservation[]) reservations.toArray();
+	}
+	
+	private Movie getMovie(int movieId){
+		//TODO: Ahj - Zen: get movie based on movieId
+		
+		return new Movie("Some Movie", movieId);
 	}
 }
