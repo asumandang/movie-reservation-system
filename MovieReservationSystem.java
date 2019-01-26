@@ -1,13 +1,12 @@
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import models.MovieSchedule;
 import exceptions.InvalidInputException;
 import models.Movie;
 import models.Reservation;
+import models.Seat;
 
 /**
  * This class calls all the function necessary for 
@@ -17,6 +16,9 @@ import models.Reservation;
  */
 public class MovieReservationSystem {
 	private ArrayList<MovieSchedule> movieSchedules = new ArrayList<MovieSchedule>();
+	private ArrayList<Movie> movies = new ArrayList<Movie>();
+	private ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+	private int scheduleId = 1;
 	
 	public static void main(String args[]){
 		new MovieReservationSystem();
@@ -68,7 +70,7 @@ public class MovieReservationSystem {
 	private void process(int choice) throws InvalidInputException{
 		switch(choice){
 			case 1: // display movies
-				displayMovies();
+				displayMovieSchedules();
 				break;
 			case 2: // add movie to cinema
 				addMovieSchedule();
@@ -88,10 +90,10 @@ public class MovieReservationSystem {
 	
 	/**
 	 * Display the movies in the system sorted by date.
-	 * Only display the first top ten recent movies unless desired by the user.
+	 * Only display the first top ten recent movies unless the user chose to show more of the movie schedules.
 	 * @author ajruth.sumandang
 	 */
-	private void displayMovies(){
+	private void displayMovieSchedules(){
 		int i = 0;
 		Comparator<MovieSchedule> comp = (m1, m2) -> {return m1.getStartDate().compareTo(m2.getStartDate());};
 		Collections.sort(movieSchedules, comp);
@@ -127,33 +129,16 @@ public class MovieReservationSystem {
 		}
 	}
 	
-	private void cancelReservation() throws InvalidInputException{
-		int customerId;
-		Reservation[] reservations;
-		System.out.print("Enter customer ID: ");
-		customerId = Helper.getIntInput();
-		
-		//TODO: Ahj - Zen: retrieves the reservation list based on the customer id
-		reservations = getReservationList(customerId);
-		displayReservationList(reservations);
-	}
-	
-	private void displayReservationList(Reservation[] reservations){
-		System.out.println("___________________________________");
-		for(int i = 0; i < reservations.length; i++){
-//			MovieSchedule movieSched = movieSchedules.
-			System.out.println("");
-		}
-	}
-	
 	private void cancelMovieSchedule(){
 		int choice;
-		displayMovies();
+		displayMovieSchedules();
+		if(movieSchedules.size() == 0){
+			return;
+		}
 		System.out.print("Choice: ");
 		try{
 			choice = Helper.getIntInput();
-			//TODO: Ahj - Mark: Uncomment if the function below is working
-			//movieSchedules.get(choice - 1).deactivate();
+			movieSchedules.get(choice - 1).deactivate();
 			movieSchedules.remove(choice - 1);
 		}catch (InvalidInputException e) {
 			System.out.println(e);
@@ -161,6 +146,65 @@ public class MovieReservationSystem {
 		}
 	}
 	
+	/**
+	 * Cancels 
+	 * @throws InvalidInputException
+	 */
+	private void cancelReservation() throws InvalidInputException{
+		int customerId;
+		int choice;
+		System.out.print("Enter customer ID: ");
+		customerId = Helper.getIntInput();
+		
+		//TODO: Ahj - Zen: retrieves the reservation list based on the customer id
+		reservations = getReservationList(customerId);
+		displayReservationList(reservations);
+		System.out.print("Choice: ");
+		choice = Helper.getIntInput(0, reservations.size());
+		
+		if(choice == 0){
+			return;
+		} else {
+			Reservation toDelete = reservations.get(choice - 1);
+			//TODO: Ahj - Yan: uncomment below if cancel reservation is working
+			toDelete.cancelReservation();
+			System.out.println("Reserved Seat successfully cancelled!");
+			reservations.remove(choice - 1);
+		}
+	}
+	
+	private void displayReservationList(ArrayList<Reservation> reservations){
+		System.out.println("___________________________________");
+		System.out.println("\tDate Reserved\tMovie Title\t\t\t\tSeat Reserved");
+		int i = 1;
+		for(Reservation r: reservations){
+			MovieSchedule movieSched = getMovieSchedule(r.getScheduleId());
+			System.out.println("[" + i + "]\t"
+					+ Helper.dateFormatter(r.getReservationDate()) + "\t"
+					+ getMovie(movieSched.getMovieId()).getMovieTitle()
+					+ r.getSeatsString());
+			i++;
+		}
+		System.out.println("[0] No changes. Exit to main menu.");
+	}
+	
+	/**
+	 * Obtains a movie schedule based on its schedule ID
+	 * @param scheduleId - the id of the movie schedule to be located
+	 * @return the movie schedule; null if not found
+	 */
+	private MovieSchedule getMovieSchedule(int scheduleId){
+		//TODO: Ahj - get 
+		MovieSchedule res = null;
+		for(MovieSchedule m: movieSchedules){
+			if(m.getScheduleId() == scheduleId){
+				res = m;
+				break;
+			}
+		}
+		return res;
+	}
+
 	/**
 	 * Adds a movie and its information such as price, cinema, and schedule.
 	 * @author ajruth.sumandang
@@ -170,7 +214,6 @@ public class MovieReservationSystem {
 	private void addMovieSchedule() throws InvalidInputException{
 		Movie movie;
 		Date startDate, endDate;
-		Time time = new Time(0);
 		float input = 0;
 		int cinema[];
 		String str;
@@ -209,9 +252,14 @@ public class MovieReservationSystem {
 				}
 				
 				
-				//TODO: Ahj - Zen: Get latest schedule id and update the dummy '1' value below
-				showMovieScheduleSummary(new MovieSchedule(1, movie.getMovieId(), cinema[i], startDate, endDate, true));
-				movieSchedules.add(new MovieSchedule(1, movie.getMovieId(), cinema[i], startDate, endDate, true));
+				//TODO: Ahj - Zen: Get latest schedule id and update the dummy schedule id number value below
+				displayMovieScheduleSummary(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
+				//TODO: show movie schedule only at the end of the movie scheduling; and user be able to edit
+				movieSchedules.add(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
+				ArrayList<Reservation> res = dummyReservations(scheduleId);
+				scheduleId++;
+				reservations.addAll(res);
+				movies.add(movie);
 				i++;
 			}
 			
@@ -233,7 +281,7 @@ public class MovieReservationSystem {
 	private Movie editMovieInformation(Movie movie){
 		int choice;
 		do{
-			showMovieInformationMenu(movie);
+			displayMovieInformationMenu(movie);
 			try {
 				choice = Helper.getIntInput(false);
 			} catch (InvalidInputException e) {
@@ -251,7 +299,7 @@ public class MovieReservationSystem {
 	 * 
 	 * @author ajruth.sumandang
 	 */
-	private void showMovieInformationMenu(Movie movie){
+	private void displayMovieInformationMenu(Movie movie){
 		System.out.println("______________________________________");
 		System.out.println("Below is the movie to be created. Input choice if you want to apply changes,");
 		System.out.println("proceed to scheduling, or terminate adding the movie.");
@@ -311,7 +359,7 @@ public class MovieReservationSystem {
 	 * 
 	 * @author ajruth.sumandang
 	 */
-	private void showMovieScheduleSummary(MovieSchedule movieSched){
+	private void displayMovieScheduleSummary(MovieSchedule movieSched){
 		System.out.println("[Movie Schedule Summary for Cinema " + movieSched.getCinemaId() +  "]");
 		System.out.println("[1] Start date: " + Helper.dateFormatter(movieSched.getStartDate()));
 		System.out.println("[2] End date: " + Helper.dateFormatter(movieSched.getEndDate()));
@@ -324,22 +372,40 @@ public class MovieReservationSystem {
 	 * @author ajruth.sumandang
 	 */
 	private void setSystem(){
-		//TODO: Ahj - Zen = set up the movieschedule here
+		//TODO: Ahj - Zen = set up the movieschedule here; do not include movieschedule with deactived status
+	
+		//TODO: Ahj - Zen = retrieve all the movie found in the movieschedule
 	}
 	
-	private Reservation[] getReservationList(int customerId){
-		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
+	private ArrayList<Reservation> getReservationList(int customerId){
+		//TODO: Ahj - Zen = get all the reservations with the received customer ID
+		ArrayList<Reservation> result = new ArrayList<Reservation>();
 		
-		reservations.add(new Reservation());
-		reservations.add(new Reservation());
-		reservations.add(new Reservation());
+		for(Reservation r: reservations){
+			if(r.getCustomerId() == customerId){
+				result.add(r);
+			}
+		}
 		
-		return (Reservation[]) reservations.toArray();
+		return result;
 	}
 	
 	private Movie getMovie(int movieId){
-		//TODO: Ahj - Zen: get movie based on movieId
+		for(Movie m: movies){
+			if(m.getMovieId() == movieId){
+				return m;
+			}
+		}
+		return null;
+	}
+	
+	private ArrayList<Reservation> dummyReservations(int sId){
+		ArrayList<Reservation> reservations = new ArrayList<Reservation>();
 		
-		return new Movie("Some Movie", movieId);
+		reservations.add(new Reservation(1, new Date("1/1/2020"), null, sId));
+		reservations.add(new Reservation(1, new Date("1/1/2020"), null, sId));
+		reservations.add(new Reservation(1, new Date("1/1/2020"), null, sId));
+		
+		return reservations;
 	}
 }
