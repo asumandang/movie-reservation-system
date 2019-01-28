@@ -22,7 +22,6 @@ public class Reservation {
 	private FileReader fileReader;
 	
 	public Reservation(){
-		reservationDate = new Date();
 		setSeat(new ArrayList<Seat>());
 	}
 	
