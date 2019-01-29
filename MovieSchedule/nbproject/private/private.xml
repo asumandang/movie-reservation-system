@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/models/MovieSchedule.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/MovieReservationSystem.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/models/Schedule.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/interfaces/FileHandler.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/exceptions/InvalidInputException.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/models/Movie.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/models/Reservation.java</file>
+            <file>file:/D:/JavaProjects/MovieSchedule/src/movieschedule/MovieScheduleTest.java</file>
+        </group>
+    </open-files>
+</project-private>
