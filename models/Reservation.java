@@ -38,13 +38,11 @@ public class Reservation {
 		
 	}
 
-	public ArrayList<HashMap<String, ArrayList<Seat>>> getReservedSeats(int scheduleId){
-		ArrayList<HashMap<String, ArrayList<Seat>>> schedSeats = new ArrayList<>();
-		HashMap<Date,ArrayList<Seat>> reservedSeats = new HashMap<>();
+	public HashMap<String, ArrayList<Seat>> getReservedSeats(int scheduleId){
 		
 		//Zen-zan, GANBATTE!!
 		
-		return schedSeats;
+		return;
 	}
 	
 	public void latestReservationId()throws IOException{
