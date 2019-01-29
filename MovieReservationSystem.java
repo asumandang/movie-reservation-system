@@ -173,6 +173,12 @@ public class MovieReservationSystem {
 		}
 	}
 	
+	/**
+	 * Displays the reservations.
+	 * @param reservations - reservations to be displayed
+	 *
+	 * @author ajruth.sumandang
+	 */
 	private void displayReservationList(ArrayList<Reservation> reservations){
 		System.out.println("___________________________________");
 		System.out.println("\tDate Reserved\tMovie Title\t\t\t\tSeat Reserved");
