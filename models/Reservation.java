@@ -1,4 +1,3 @@
-package models;
 import java.util.Date;
 import java.util.ArrayList;
 import java.io.BufferedWriter;
@@ -23,7 +22,6 @@ public class Reservation {
 	private FileReader fileReader;
 	
 	public Reservation(){
-		reservationDate = new Date();
 		setSeat(new ArrayList<Seat>());
 	}
 	
