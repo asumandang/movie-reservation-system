@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import files.FileHandler
 
 /**
  * 
@@ -25,7 +26,6 @@ public class Reservation {
 		setSeat(new ArrayList<Seat>());
 	}
 	
-	//Zen-san, save a file for this. 
 	public Reservation(int customerId, Date date, ArrayList<Seat> seat, int scheduleId){ 
 		this.customerId = customerId;
 		reservationDate = date;
@@ -38,17 +38,9 @@ public class Reservation {
 		}
 		
 	}
-
-	public HashMap<String, ArrayList<Seat>> getReservedSeats(int scheduleId){
-		
-		//Zen-zan, GANBATTE!!
-		
-		return;
-	}
 	
 	public void cancelReservation(){
-		//hallu Zen-san! Insert here ^_^
-		//deleteReservation(reservationId) from filehandler;
+		FileHandler.deleteReservation(reservationId);
 	}
 	
 	public void latestReservationId()throws IOException{
