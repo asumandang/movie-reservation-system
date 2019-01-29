@@ -24,7 +24,7 @@ public class Movie {
 			movieId = 1;
 		}else{
 			try{
-				fileReader = new FileReader("LatestMovie.txt");
+				fileReader = new FileReader("LatestMovieId.txt");
 				movieId = fileReader.read();
 				fileReader.close();
 				movieId++;
@@ -33,6 +33,10 @@ public class Movie {
 				System.out.println("File not found!"); 
 			}
 		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter("LatestMovieId.txt"));
+		writer.write(movieId);
+	 
+		writer.close();
 	}
 	
 	public boolean isEmpty(){
