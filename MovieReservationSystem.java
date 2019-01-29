@@ -252,26 +252,31 @@ public class MovieReservationSystem {
 				System.out.print("Enter end date (MM/DD/YYYY): ");
 				endDate = Helper.getDateInput();
 				
-				if(startDate.compareTo(endDate) > 0){
-					System.out.println("End date is less than start date. Changing movie end date to its start date...");
-					endDate = startDate;
-				}
-				
-				
-				//TODO: Ahj - Zen: Get latest schedule id and update the dummy schedule id number value below
-				displayMovieScheduleSummary(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
-				//TODO: show movie schedule only at the end of the movie scheduling; and user be able to edit
-				movieSchedules.add(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
-				ArrayList<Reservation> res = dummyReservations(scheduleId);
-				scheduleId++;
-				reservations.addAll(res);
-				movies.add(movie);
-				i++;
+				if (startDate.compareTo(endDate) > 0) {
+                  			System.out.println("End date is less than start date. Changing movie end date to its start date...");
+                    			endDate = startDate;
+               	 		}
+
+                		//TODO: Ahj - Zen: Get latest schedule id and update the dummy schedule id number value below
+                		displayMovieScheduleSummary(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
+                		try {
+                    		//TODO: show movie schedule only at the end of the movie scheduling; and user be able to edit
+                    		//movieSchedules.add(new MovieSchedule(scheduleId, movie.getMovieId(), cinema[i], startDate, endDate, true));
+                    		//TODO: implement the movieschedule save function
+                    		new MovieSchedule(MovieScheduleTest.getLatestId(), movie.getMovieId(), cinema[i], startDate, endDate, true).save();
+                		} catch (DateCollisionException ex) {
+                    			addMovieSchedule();
+                		}
+                		ArrayList<Reservation> res = dummyReservations(scheduleId);
+                		scheduleId++;
+                		reservations.addAll(res);
+                		movies.add(movie);
+                		i++;
 			}
 			
 		}catch(InvalidInputException e){ 
-			// if any of the input is invalid and the user opted not to input again,
-			// the system prompts the user that the movie was not created due to an invalid  input.
+		// if any of the input is invalid and the user opted not to input again,
+		// the system prompts the user that the movie was not created due to an invalid  input.
 			throw new InvalidInputException(errMsg);
 		}
 	}
