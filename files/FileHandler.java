@@ -9,5 +9,5 @@ public class FileHandler {
 		
 	}
 	
-	public void deleteReservation(int reservationId){}
+	public static void deleteReservation(int reservationId){}
 }
