@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class FileHandler {
 	
-	public static HashMap<String, ArrayList<Seat>> getReservedSeats(int scheduleId){
+	public static HashMap<Date, ArrayList<Seat>> getReservedSeats(int scheduleId){
 		
 	}
 	
